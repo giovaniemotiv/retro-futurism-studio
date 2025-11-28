@@ -38,20 +38,20 @@ const AudioEmotion = () => {
   // Listen to real-time performance metrics via window events
   useEffect(() => {
     const handlePerformanceMetrics = ((event: CustomEvent<PerformanceMetricsEvent>) => {
-      console.log('📊 AudioEmotion received performance metrics event:', event.detail);
+      //console.log('📊 AudioEmotion received performance metrics event:', event.detail);
       setPerformanceMetrics(event.detail);
       
       // Update emotion levels from excitement, interest, and focus
       const { excitement, interest, focus, headsetId } = event.detail;
       const combinedScore = (excitement + interest + focus) / 3;
       
-      console.log(`🎵 EMOTION: ${headsetId} - excitement=${excitement.toFixed(2)}, interest=${interest.toFixed(2)}, focus=${focus.toFixed(2)}, combined=${combinedScore.toFixed(2)}`);
+      //console.log(`🎵 EMOTION: ${headsetId} - excitement=${excitement.toFixed(2)}, interest=${interest.toFixed(2)}, focus=${focus.toFixed(2)}, combined=${combinedScore.toFixed(2)}`);
       
       setExcitementLevels(prev => new Map(prev).set(headsetId, combinedScore));
     }) as EventListener;
     
     window.addEventListener('performance-metrics', handlePerformanceMetrics);
-    console.log('✅ AudioEmotion event listener registered');
+    //console.log('✅ AudioEmotion event listener registered');
     
     return () => {
       window.removeEventListener('performance-metrics', handlePerformanceMetrics);
@@ -100,11 +100,11 @@ const AudioEmotion = () => {
   const startPlayback = () => {
     setIsPlaying(true);
     setPlaybackStartTime(Date.now());
-    console.log(`🎵 Playing audio clip ${currentClipIndex + 1}`);
+    //console.log(`🎵 Playing audio clip ${currentClipIndex + 1}`);
   };
 
   const finishAudioEmotion = () => {
-    console.log("🎵 All audio clips complete! Calculating collective emotion score...");
+    //console.log("🎵 All audio clips complete! Calculating collective emotion score...");
     
     // Calculate average excitement across all clips
     let totalExcitement = 0;
@@ -118,10 +118,10 @@ const AudioEmotion = () => {
     const averageEmotionScore = totalSamples > 0 ? totalExcitement / totalSamples : 0;
     const collectiveScore = Math.round(averageEmotionScore * 100);
 
-    console.log(`🎶 Collective emotion score: ${collectiveScore}`);
+    //console.log(`🎶 Collective emotion score: ${collectiveScore}`);
 
     const selectedSoundtrack = getSoundtrackByScore(collectiveScore);
-    console.log(`🎶 Selected soundtrack: ${selectedSoundtrack.name}`);
+    //console.log(`🎶 Selected soundtrack: ${selectedSoundtrack.name}`);
 
     setTimeout(() => {
       navigate("/video-output", {

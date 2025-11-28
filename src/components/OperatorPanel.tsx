@@ -46,7 +46,7 @@ export const OperatorPanel = ({
           filter: `session_id=eq.${sessionId}`
         },
         (payload) => {
-          console.log('📡 Operator controls updated:', payload);
+          //console.log('📡 Operator controls updated:', payload);
           if (payload.new) {
             const controls = payload.new as any;
             if (controls.push_sensitivity !== null) {
@@ -95,7 +95,7 @@ export const OperatorPanel = ({
     if (error) {
       console.error('Error updating operator controls:', error);
     } else {
-      console.log('✅ Operator controls updated');
+      //console.log('✅ Operator controls updated');
     }
   };
 

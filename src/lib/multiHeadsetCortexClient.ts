@@ -87,12 +87,12 @@ export class MultiHeadsetCortexClient {
    */
   async connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      console.log('🔌 Connecting to Cortex API at wss://localhost:6868...');
+      //console.log('🔌 Connecting to Cortex API at wss://localhost:6868...');
       
       this.ws = new WebSocket('wss://localhost:6868');
 
       this.ws.onopen = () => {
-        console.log('✅ WebSocket connected');
+        //console.log('✅ WebSocket connected');
         this.onConnectionStatus?.('connected');
         resolve();
       };
@@ -104,7 +104,7 @@ export class MultiHeadsetCortexClient {
       };
 
       this.ws.onclose = () => {
-        console.log('🔌 WebSocket disconnected');
+        //console.log('🔌 WebSocket disconnected');
         this.onConnectionStatus?.('disconnected');
       };
 
@@ -255,7 +255,7 @@ export class MultiHeadsetCortexClient {
         id
       };
 
-      console.log('📤 Sending:', request);
+      //console.log('📤 Sending:', request);
 
       this.callbacks.set(id, (response) => {
         if (response.error) {
@@ -274,7 +274,7 @@ export class MultiHeadsetCortexClient {
    */
   async getCortexInfo(): Promise<any> {
     const result = await this.sendRequest('getCortexInfo');
-    console.log('ℹ️ Cortex Info:', result);
+    //console.log('ℹ️ Cortex Info:', result);
     return result;
   }
 
@@ -286,7 +286,7 @@ export class MultiHeadsetCortexClient {
       clientId: this.config.clientId,
       clientSecret: this.config.clientSecret
     });
-    console.log('🔑 Access requested:', result);
+    //console.log('🔑 Access requested:', result);
   }
 
   /**
@@ -301,7 +301,7 @@ export class MultiHeadsetCortexClient {
     });
     
     this.authToken = result.cortexToken;
-    console.log('✅ Authorized, token received');
+    //console.log('✅ Authorized, token received');
     return this.authToken;
   }
 
@@ -310,7 +310,7 @@ export class MultiHeadsetCortexClient {
    */
   async queryHeadsets(): Promise<HeadsetInfo[]> {
     const result = await this.sendRequest('queryHeadsets');
-    console.log('🎧 Available headsets:', result);
+    //console.log('🎧 Available headsets:', result);
     return result || [];
   }
 
@@ -325,7 +325,7 @@ export class MultiHeadsetCortexClient {
       headset: headsetId
     });
     
-    console.log(`🎧 Headset ${headsetId} connection initiated:`, result);
+    //console.log(`🎧 Headset ${headsetId} connection initiated:`, result);
   }
 
   /**
@@ -349,7 +349,7 @@ export class MultiHeadsetCortexClient {
       status: 'ready'
     });
     
-    console.log(`✅ Session created for headset ${headsetId}:`, sessionId);
+    //console.log(`✅ Session created for headset ${headsetId}:`, sessionId);
     return sessionId;
   }
 
@@ -366,7 +366,7 @@ export class MultiHeadsetCortexClient {
       throw new Error(`No session found for headset ${headsetId}`);
     }
 
-    console.log(`🔔 Subscribing to streams for headset ${headsetId}, session: ${session.sessionId}`);
+    //console.log(`🔔 Subscribing to streams for headset ${headsetId}, session: ${session.sessionId}`);
     
     const result = await this.sendRequest('subscribe', {
       cortexToken: this.authToken,
@@ -374,18 +374,18 @@ export class MultiHeadsetCortexClient {
       streams: ['com', 'mot', 'met'] // Mental commands + motion sensors + performance metrics
     });
 
-    console.log(`✅ Subscribed to streams for headset ${headsetId}:`, JSON.stringify(result, null, 2));
+    //console.log(`✅ Subscribed to streams for headset ${headsetId}:`, JSON.stringify(result, null, 2));
     
     // Extract and store the 'met' columns schema from subscription response
     if (result.success && Array.isArray(result.success)) {
       const metStream = result.success.find((s: any) => s.streamName === 'met');
       if (metStream && metStream.cols) {
         this.metricsCols = metStream.cols;
-        console.log(`📋 Stored 'met' columns schema:`, this.metricsCols);
+        //console.log(`📋 Stored 'met' columns schema:`, this.metricsCols);
       }
     }
     
-    console.log(`📊 Performance metrics ('met') should now be streaming at 2Hz`);
+    //console.log(`📊 Performance metrics ('met') should now be streaming at 2Hz`);
   }
 
   /**
@@ -403,7 +403,7 @@ export class MultiHeadsetCortexClient {
       status: 'load'
     });
 
-    console.log(`✅ Profile loaded for headset ${headsetId}:`, result);
+    //console.log(`✅ Profile loaded for headset ${headsetId}:`, result);
   }
 
   /**
@@ -418,7 +418,7 @@ export class MultiHeadsetCortexClient {
       cortexToken: this.authToken
     });
 
-    console.log('📋 Available profiles:', result);
+    //console.log('📋 Available profiles:', result);
     return result || [];
   }
 
@@ -453,14 +453,14 @@ export class MultiHeadsetCortexClient {
           await this.loadProfile(headsetId, profiles[0]);
         }
       } catch (error) {
-        console.log(`No profiles found for headset ${headsetId}, continuing without profile`);
+        //console.log(`No profiles found for headset ${headsetId}, continuing without profile`);
       }
       
       // Subscribe to mental commands
       await this.subscribeMentalCommands(headsetId);
       
       this.onHeadsetStatus?.(headsetId, 'ready');
-      console.log(`🎉 Headset ${headsetId} fully initialized and ready!`);
+      //console.log(`🎉 Headset ${headsetId} fully initialized and ready!`);
       
     } catch (error) {
       console.error(`❌ Initialization failed for headset ${headsetId}:`, error);
@@ -489,7 +489,7 @@ export class MultiHeadsetCortexClient {
       await this.authorize();
       
       this.onConnectionStatus?.('ready');
-      console.log('🎉 Cortex client authenticated and ready!');
+      //console.log('🎉 Cortex client authenticated and ready!');
       
     } catch (error) {
       console.error('❌ Initialization failed:', error);
@@ -521,7 +521,7 @@ export class MultiHeadsetCortexClient {
       // Could add session closing logic here if needed
       this.sessions.delete(headsetId);
       this.onHeadsetStatus?.(headsetId, 'disconnected');
-      console.log(`🔌 Headset ${headsetId} disconnected`);
+      //console.log(`🔌 Headset ${headsetId} disconnected`);
     }
   }
 
@@ -535,6 +535,6 @@ export class MultiHeadsetCortexClient {
     }
     this.authToken = null;
     this.sessions.clear();
-    console.log('🔌 Disconnected from Cortex');
+    //console.log('🔌 Disconnected from Cortex');
   }
 }

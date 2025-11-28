@@ -66,7 +66,7 @@ export const MultiHeadsetConnection = ({ onMentalCommand, onMotion, onPerformanc
       });
       
       // Use the returned client directly (no need to wait for React state)
-      console.log('🔍 Loading available headsets with returned client');
+      //console.log('🔍 Loading available headsets with returned client');
       loadAvailableHeadsets(client);
 
     } catch (err) {
@@ -82,10 +82,10 @@ export const MultiHeadsetConnection = ({ onMentalCommand, onMotion, onPerformanc
 
   const loadAvailableHeadsets = async (client: any) => {
     try {
-      console.log('🔍 Calling client.getAvailableHeadsets()...');
+      //console.log('🔍 Calling client.getAvailableHeadsets()...');
       const headsets = await client.getAvailableHeadsets();
       setAvailableHeadsets(headsets);
-      console.log(`✅ Found ${headsets.length} headset(s):`, headsets);
+      //console.log(`✅ Found ${headsets.length} headset(s):`, headsets);
       
       if (headsets.length === 0) {
         toast({
@@ -102,7 +102,7 @@ export const MultiHeadsetConnection = ({ onMentalCommand, onMotion, onPerformanc
   // Safety net: Load headsets if they weren't loaded during connect()
   useEffect(() => {
     if (cortexContext.status === 'ready' && cortexContext.client && availableHeadsets.length === 0) {
-      console.log('🛡️ Safety net triggered: Loading headsets from useEffect');
+      //console.log('🛡️ Safety net triggered: Loading headsets from useEffect');
       loadAvailableHeadsets(cortexContext.client);
     }
   }, [cortexContext.status, cortexContext.client]);

@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log('📥 Received request to generate-sora-video');
+    //console.log('📥 Received request to generate-sora-video');
     
     if (!openAIApiKey) {
       console.error('❌ OPENAI_API_KEY not configured');
@@ -34,12 +34,12 @@ serve(async (req) => {
       );
     }
 
-    console.log('🎬 Generating Sora video with metadata:', metadata);
+    //console.log('🎬 Generating Sora video with metadata:', metadata);
 
     // Create a cinematic prompt from the metadata tags
     const prompt = `Create a cinematic, futuristic video that seamlessly blends the following themes: ${metadata.join(', ')}. The video should have a retro-futuristic aesthetic with clean, minimalist visuals. Include smooth transitions, ambient lighting, and a sense of hope for a sustainable future. Style: cinematic, 4K, professional color grading.`;
 
-    console.log('📝 Sora prompt:', prompt);
+    //console.log('📝 Sora prompt:', prompt);
 
     // Step 1: Start video generation job
     const createResponse = await fetch('https://api.openai.com/v1/videos', {
@@ -71,7 +71,7 @@ serve(async (req) => {
 
     const createData = await createResponse.json();
     const videoId = createData.id;
-    console.log('🎥 Video job started with ID:', videoId);
+    //console.log('🎥 Video job started with ID:', videoId);
 
     // Step 2: Poll for completion (with timeout)
     const maxAttempts = 60; // 5 minutes max (5 second intervals)
@@ -95,7 +95,7 @@ serve(async (req) => {
       }
 
       const statusData = await statusResponse.json();
-      console.log(`📊 Status check ${attempts}/${maxAttempts}:`, statusData.status);
+      //console.log(`📊 Status check ${attempts}/${maxAttempts}:`, statusData.status);
 
       if (statusData.status === 'completed') {
         // Step 3: Fetch the video content
@@ -126,7 +126,7 @@ serve(async (req) => {
         
         videoUrl = `data:video/mp4;base64,${btoa(base64)}`;
         
-        console.log('✅ Video generation completed and fetched');
+        //console.log('✅ Video generation completed and fetched');
         break;
       } else if (statusData.status === 'failed' || statusData.status === 'cancelled') {
         console.error('❌ Video generation failed:', statusData);

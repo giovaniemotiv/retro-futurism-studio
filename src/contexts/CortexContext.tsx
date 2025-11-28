@@ -43,7 +43,7 @@ export const CortexProvider = ({ children }: CortexProviderProps) => {
 
     // Set up event handlers that dispatch to window
     newClient.onConnectionStatus = (newStatus) => {
-      console.log('🔌 CortexContext connection status:', newStatus);
+      //console.log('🔌 CortexContext connection status:', newStatus);
       setStatus(newStatus as any);
     };
 
@@ -63,7 +63,7 @@ export const CortexProvider = ({ children }: CortexProviderProps) => {
     };
 
     newClient.onHeadsetStatus = (headsetId: string, headsetStatus: string) => {
-      console.log(`🎧 Headset ${headsetId} status: ${headsetStatus}`);
+      //console.log(`🎧 Headset ${headsetId} status: ${headsetStatus}`);
       // Update connected headsets list
       setConnectedHeadsets((prev) => {
         if (headsetStatus === 'ready' && !prev.includes(headsetId)) {
@@ -84,7 +84,7 @@ export const CortexProvider = ({ children }: CortexProviderProps) => {
 
     try {
       await newClient.initialize();
-      console.log('✅ CortexContext: Client initialized successfully');
+      //console.log('✅ CortexContext: Client initialized successfully');
       return newClient;
     } catch (err) {
       console.error('Failed to initialize Cortex:', err);
@@ -95,7 +95,7 @@ export const CortexProvider = ({ children }: CortexProviderProps) => {
 
   const disconnect = () => {
     if (client) {
-      console.log('🔌 CortexContext disconnecting...');
+      //console.log('🔌 CortexContext disconnecting...');
       client.disconnect();
       setClient(null);
       setStatus('disconnected');

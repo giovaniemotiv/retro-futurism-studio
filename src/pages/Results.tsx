@@ -47,7 +47,7 @@ const Results = () => {
 
     const startBackgroundGeneration = async () => {
       const metadata = collectMetadata();
-      console.log("🎬 Starting Sora generation in background with metadata:", metadata);
+      //console.log("🎬 Starting Sora generation in background with metadata:", metadata);
 
       // Start Sora generation (returns immediately with job ID)
       // The actual generation happens on the server

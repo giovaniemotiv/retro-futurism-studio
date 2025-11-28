@@ -29,10 +29,10 @@ const VideoOutput = () => {
       return;
     }
 
-    console.log("🎬 Starting Sora video generation with metadata:", metadataFromState);
+    //console.log("🎬 Starting Sora video generation with metadata:", metadataFromState);
     if (collectiveScore) {
-      console.log("🎵 Collective excitement score:", collectiveScore);
-      console.log("🎶 Selected soundtrack:", soundtrack?.name);
+      //console.log("🎵 Collective excitement score:", collectiveScore);
+      //console.log("🎶 Selected soundtrack:", soundtrack?.name);
     }
     
     // Call the Sora edge function with extended timeout
@@ -68,7 +68,7 @@ const VideoOutput = () => {
         const data = await response.json();
         
         if (data?.videoUrl) {
-          console.log("✅ Video generated:", data.videoUrl);
+          //console.log("✅ Video generated:", data.videoUrl);
           setVideoUrl(data.videoUrl);
         } else {
           setError("No video URL returned from API");

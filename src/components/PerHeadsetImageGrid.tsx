@@ -198,7 +198,7 @@ export const PerHeadsetImageGrid = ({
   useEffect(() => {
     if (!mentalCommand) return;
     
-    console.log('Mental command received:', mentalCommand);
+    //console.log('Mental command received:', mentalCommand);
     setLastCommandReceived({
       com: mentalCommand.com,
       pow: mentalCommand.pow,
@@ -233,7 +233,7 @@ export const PerHeadsetImageGrid = ({
         const duration = now - existing.startTime;
         if (duration >= PUSH_HOLD_TIME_MS) {
           // Hold completed - lock selection
-          console.log(`✅ SELECTION CONFIRMED: Headset ${headsetId.substring(0,8)} selected image ${focusedImageId}`);
+          //console.log(`✅ SELECTION CONFIRMED: Headset ${headsetId.substring(0,8)} selected image ${focusedImageId}`);
           
           setHeadsetSelections(prev => {
             const updated = new Map(prev);
@@ -261,7 +261,7 @@ export const PerHeadsetImageGrid = ({
     } else {
       // Push released or below threshold - reset
       if (existing) {
-        console.log(`🔄 PUSH RELEASED: Headset ${headsetId.substring(0,8)} released at ${((now - existing.startTime) / 1000).toFixed(1)}s`);
+        //console.log(`🔄 PUSH RELEASED: Headset ${headsetId.substring(0,8)} released at ${((now - existing.startTime) / 1000).toFixed(1)}s`);
         setLastPushReleaseTime(prev => new Map(prev).set(headsetId, now));
       }
       setPushProgress(prev => {

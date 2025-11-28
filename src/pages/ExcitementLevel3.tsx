@@ -34,12 +34,12 @@ const ExcitementLevel3 = () => {
   // Listen to window events for real-time performance metrics
   useEffect(() => {
     const handlePerformanceMetrics = ((event: CustomEvent<PerformanceMetricsEvent>) => {
-      console.log('📊 Level3 received performance metrics event:', event.detail);
+      //console.log('📊 Level3 received performance metrics event:', event.detail);
       setPerformanceMetrics(event.detail);
     }) as EventListener;
     
     window.addEventListener('performance-metrics', handlePerformanceMetrics);
-    console.log('✅ Level3 performance metrics listener registered');
+    //console.log('✅ Level3 performance metrics listener registered');
     
     return () => {
       window.removeEventListener('performance-metrics', handlePerformanceMetrics);
@@ -68,7 +68,7 @@ const ExcitementLevel3 = () => {
         averageExcitement: (existing.totalExcitement + excitement) / (existing.sampleCount + 1)
       };
       
-      console.log(`📊 Recording excitement for artwork ${artworkId}: ${excitement.toFixed(3)} (avg: ${updated.averageExcitement.toFixed(3)})`);
+      //console.log(`📊 Recording excitement for artwork ${artworkId}: ${excitement.toFixed(3)} (avg: ${updated.averageExcitement.toFixed(3)})`);
       
       return new Map(prev).set(artworkId, updated);
     });
@@ -80,10 +80,10 @@ const ExcitementLevel3 = () => {
     
     const timer = setTimeout(() => {
       if (currentArtworkIndex < artworkAudioPairs.length - 1) {
-        console.log(`⏭️ Advancing to artwork ${currentArtworkIndex + 2}`);
+        //console.log(`⏭️ Advancing to artwork ${currentArtworkIndex + 2}`);
         setCurrentArtworkIndex(prev => prev + 1);
       } else {
-        console.log('🎉 All artworks displayed, calculating top 5');
+        //console.log('🎉 All artworks displayed, calculating top 5');
         setIsComplete(true);
       }
     }, 7000);
@@ -100,7 +100,7 @@ const ExcitementLevel3 = () => {
       .sort((a, b) => b.averageExcitement - a.averageExcitement)
       .slice(0, 5);
     
-    console.log('🏆 Top 5 artworks by excitement:', sortedArtworks);
+    //console.log('🏆 Top 5 artworks by excitement:', sortedArtworks);
     
     const top5Ids = sortedArtworks.map(score => score.artworkId);
     const top5Artworks = artworkAudioPairs.filter(pair => top5Ids.includes(pair.id));

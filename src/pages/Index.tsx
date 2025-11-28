@@ -26,15 +26,15 @@ const Index = () => {
   };
 
   const handleMotion = (motion: MotionEvent) => {
-    console.log(`🎮 Index received motion: headset=${motion.headsetId.substring(0,8)}, pitch=${motion.pitch.toFixed(2)}°, rotation=${motion.rotation.toFixed(2)}°`);
+    //console.log(`🎮 Index received motion: headset=${motion.headsetId.substring(0,8)}, pitch=${motion.pitch.toFixed(2)}°, rotation=${motion.rotation.toFixed(2)}°`);
     setMotionEvent(motion);
   };
   
   const handlePerformanceMetrics = (metrics: PerformanceMetricsEvent) => {
-    console.log(`📊 Index handlePerformanceMetrics called:`, {
-      headsetId: metrics.headsetId,
-      excitement: metrics.excitement
-    });
+    //console.log(`📊 Index handlePerformanceMetrics called:`, {
+    //   headsetId: metrics.headsetId,
+    //   excitement: metrics.excitement
+    // });
     setExcitementLevels(prev => new Map(prev).set(metrics.headsetId, metrics.excitement));
   };
 
@@ -69,7 +69,7 @@ const Index = () => {
   // Calculate average excitement for brain visualization
   const averageExcitement = Array.from(excitementLevels.values()).reduce((sum, val) => sum + val, 0) / Math.max(excitementLevels.size, 1);
   
-  console.log(`🧠 Brain excitement: ${(averageExcitement * 100).toFixed(1)}%, levels:`, Object.fromEntries(excitementLevels));
+  //console.log(`🧠 Brain excitement: ${(averageExcitement * 100).toFixed(1)}%, levels:`, Object.fromEntries(excitementLevels));
 
   return (
     <div className="min-h-screen relative">

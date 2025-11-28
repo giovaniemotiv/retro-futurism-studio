@@ -35,8 +35,8 @@ export const CortexConnection = ({ onMentalCommand }: CortexConnectionProps) => 
       return;
     }
 
-    console.log('🔑 Connecting with Client ID:', trimmedClientId);
-    console.log('🔑 Client Secret length:', trimmedClientSecret.length, 'characters');
+    //console.log('🔑 Connecting with Client ID:', trimmedClientId);
+    //console.log('🔑 Client Secret length:', trimmedClientSecret.length, 'characters');
 
     setStatus('connecting');
     setError(null);
@@ -49,7 +49,7 @@ export const CortexConnection = ({ onMentalCommand }: CortexConnectionProps) => 
 
       // Set up event handlers
       client.onConnectionStatus = (newStatus) => {
-        console.log('Connection status:', newStatus);
+        //console.log('Connection status:', newStatus);
         if (newStatus === 'ready') {
           setStatus('ready');
           toast({
@@ -64,7 +64,7 @@ export const CortexConnection = ({ onMentalCommand }: CortexConnectionProps) => 
       };
 
       client.onMentalCommand = (event) => {
-        console.log('Mental command:', event);
+        //console.log('Mental command:', event);
         setLastCommand(event);
         onMentalCommand?.(event);
       };
