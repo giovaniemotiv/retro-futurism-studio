@@ -138,6 +138,8 @@ export const MultiHeadsetConnection = ({ onMentalCommand, onMotion, onPerformanc
 
   // Update connected headsets when statuses change
   useEffect(() => {
+    // Only call updateConnectedHeadsets when headsetStatuses changes, which is safe.
+    // updateConnectedHeadsets does not call setHeadsetStatuses, so no infinite loop risk.
     updateConnectedHeadsets();
   }, [headsetStatuses]);
 

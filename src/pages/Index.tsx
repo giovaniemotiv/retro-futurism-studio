@@ -59,11 +59,13 @@ const Index = () => {
 
   // Auto-scroll to image grid when connection is ready and headsets are connected
   useEffect(() => {
+    // Only scroll if connectionStatus or connectedHeadsets changes, never triggers setState
     if (connectionStatus === 'ready' && connectedHeadsets.length > 0 && imageGridRef.current) {
       setTimeout(() => {
         imageGridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 500);
     }
+    // No setState here, so no risk of infinite loop
   }, [connectionStatus, connectedHeadsets.length]);
 
   // Calculate average excitement for brain visualization

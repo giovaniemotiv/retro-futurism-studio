@@ -44,6 +44,17 @@ export const PerHeadsetImageGrid = ({
   const smoothedRotation = useRef<Map<string, number>>(new Map());
   const smoothedPitch = useRef<Map<string, number>>(new Map());
   const animationFrameId = useRef<number | null>(null);
+  // Refs to avoid effect dependency loops
+  const headsetSelectionsRef = useRef<Map<string, HeadsetSelection>>(new Map());
+  const pushProgressRef = useRef<Map<string, { startTime: number; imageId: number }>>(new Map());
+  // Keep refs in sync with state
+  useEffect(() => {
+    headsetSelectionsRef.current = headsetSelections;
+  }, [headsetSelections]);
+
+  useEffect(() => {
+    pushProgressRef.current = pushProgress;
+  }, [pushProgress]);
 
   // Direct 3x3 grid mapping constants tuned for fluid, low-latency feel
   const ROTATION_THRESHOLD = 12; // degrees (turn head left/right beyond this to move columns)
@@ -100,11 +111,11 @@ export const PerHeadsetImageGrid = ({
         const motion = latestMotionData.current.get(headsetId);
         if (!motion) return;
 
-        const currentSelection = headsetSelections.get(headsetId);
+        const currentSelection = headsetSelectionsRef.current.get(headsetId);
         if (!currentSelection || currentSelection.imageId !== null) return;
 
         // FREEZE navigation if this headset is actively pushing
-        if (pushProgress.has(headsetId)) return;
+        if (pushProgressRef.current.has(headsetId)) return;
 
         // Apply exponential smoothing to reduce jitter
         const prevRotation = smoothedRotation.current.get(headsetId) || 0;
@@ -160,7 +171,7 @@ export const PerHeadsetImageGrid = ({
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [connectedHeadsets, headsetSelections, pushProgress, images.length, ROTATION_THRESHOLD, PITCH_THRESHOLD, SMOOTHING_FACTOR]);
+  }, [connectedHeadsets, images.length, ROTATION_THRESHOLD, PITCH_THRESHOLD, SMOOTHING_FACTOR]);
   
   // Auto-cycle focused image for each headset at a slow, constant pace
   useEffect(() => {
@@ -216,14 +227,15 @@ export const PerHeadsetImageGrid = ({
   useEffect(() => {
     if (!mentalCommand) return;
 
+    // Use refs to avoid dependency loop
     const { com, headsetId, pow } = mentalCommand;
     const now = Date.now();
 
-    const currentSelection = headsetSelections.get(headsetId);
+    const currentSelection = headsetSelectionsRef.current.get(headsetId);
     if (!currentSelection || currentSelection.imageId !== null) return;
 
     const focusedImageId = images[currentSelection.focusedIndex].id;
-    const existing = pushProgress.get(headsetId);
+    const existing = pushProgressRef.current.get(headsetId);
 
     if (com === "push" && pow >= PUSH_POWER_THRESHOLD) {
       // Start or continue hold on currently focused image
@@ -232,9 +244,6 @@ export const PerHeadsetImageGrid = ({
       } else {
         const duration = now - existing.startTime;
         if (duration >= PUSH_HOLD_TIME_MS) {
-          // Hold completed - lock selection
-          //console.log(`✅ SELECTION CONFIRMED: Headset ${headsetId.substring(0,8)} selected image ${focusedImageId}`);
-          
           setHeadsetSelections(prev => {
             const updated = new Map(prev);
             const current = updated.get(headsetId);
@@ -261,7 +270,6 @@ export const PerHeadsetImageGrid = ({
     } else {
       // Push released or below threshold - reset
       if (existing) {
-        //console.log(`🔄 PUSH RELEASED: Headset ${headsetId.substring(0,8)} released at ${((now - existing.startTime) / 1000).toFixed(1)}s`);
         setLastPushReleaseTime(prev => new Map(prev).set(headsetId, now));
       }
       setPushProgress(prev => {
@@ -270,7 +278,7 @@ export const PerHeadsetImageGrid = ({
         return next;
       });
     }
-  }, [mentalCommand, images, headsetSelections, pushProgress, PUSH_POWER_THRESHOLD, PUSH_HOLD_TIME_MS]);
+  }, [mentalCommand, images, PUSH_POWER_THRESHOLD, PUSH_HOLD_TIME_MS]);
 
   // Check if all selections are complete
   useEffect(() => {
